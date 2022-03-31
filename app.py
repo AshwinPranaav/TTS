@@ -1,5 +1,6 @@
 from re import T
 from flask import Flask, render_template, request
+from tts import tts_output
 
 app = Flask(__name__)
 
@@ -13,7 +14,7 @@ def hello_world():
 def execute_tts():
     if request.method == "POST":
         text = request.form.get("text")
-        execute_tts(text)
+        tts_output(text)
         return "<h1>Form submitted ! Check console !</h1>"
 
 
