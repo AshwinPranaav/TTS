@@ -1,5 +1,5 @@
 from re import T
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, Response
 from tts import tts_output
 
 app = Flask(__name__)
@@ -7,15 +7,20 @@ app = Flask(__name__)
 
 @app.route("/")
 def hello_world():
-    return render_template("index.html")
+    return Response(render_template("index.html"), headers = {"Cache-Control": "no-store"})
 
 
 @app.route("/tts", methods=["GET", "POST"])
 def execute_tts():
     if request.method == "POST":
-        text = request.form.get("text")
+        doc = request.files.get("document")
+        if doc:
+            text = open(doc.filename).read()
+            
+        else:
+            text = request.form.get("text")
         tts_output(text)
-        return "<h1>Form submitted ! Check console !</h1>"
+    return Response(render_template("index.html", audio_file= "/static/text.wav"), headers = {"Cache-Control": "no-store"})
 
 
 app.run(debug=True)
