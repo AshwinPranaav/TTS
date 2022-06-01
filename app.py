@@ -19,8 +19,11 @@ def execute_tts():
             
         else:
             text = request.form.get("text")
-        tts_output(text)
-    return Response(render_template("index.html", audio_file= "/static/text.wav"), headers = {"Cache-Control": "no-store"})
+        print(request.form)
+        tts_output(text, request.form.get('base_voice') == 'on')
+    return Response(render_template("index.html", audio_file= "/static/text.wav",
+        base_voice_file = "/static/base_voice.wav" if request.form.get("base_voice") == "on" else None
+               ), headers = {"Cache-Control": "no-store"})
 
 
 app.run(debug=True)

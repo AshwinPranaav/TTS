@@ -20,7 +20,7 @@
         <div class="row my-3">
             <h3>Text to speech conversion</h3>
         </div>
-        <form action="tts" class="form" method="post" enctype="multipart/form-data">
+        <form action="tts" class="form" method="post" enctype="multipart/form-data" id="tts_form">
             <div class="row my-3">
                 <div class="col">
 
@@ -52,9 +52,17 @@
                             >
                 </div>
             </div>
+            
+            <div class="row my-3">
+                <div class="col">
+                    <label for="base_voice_checkbox">Include base voice</label>
+                    <input type="checkbox" id="base_voice_checkbox" onclick="handleCheckboxToggle(event)">
+                </div>
+            </div>
 
             <div class="row my-3">
                 <div class="col-2">
+                    <input type="text" hidden name="base_voice" value="off">
                     <input type="submit" value="Submit" class="btn btn-primary">
                 </div>
             </div>
@@ -67,10 +75,23 @@
                 </audio>
             </div>
         {% endif %}
+
+        {% if base_voice_file %} 
+            <div class="row my-3">
+                <audio controls>
+                    <source src="{{ base_voice_file }}" type="audio/wav">
+                </audio>
+            </div>
+        {% endif %}
         
     </div>
 
 
+    <script>
+        function handleCheckboxToggle(event) {
+            tts_form["base_voice"].value = event.target.checked ? "on" : "off";
+        }
+    </script>
 </body>
 
 </html>
